@@ -2,7 +2,7 @@
 
 **Description:**
 
-A OSINT=\* based, Chrome extension that searches for CVE info and FOSS & MOTS software versions.
+A OSINT=\* based, Chrome extension that searches for CVE info + FOSS & MOTS software versions.
 
 Special thanks to the OG creators or OSINT=* Adam Odell, Shady Khourshid, & Ryan Borum
 
