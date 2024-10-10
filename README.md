@@ -1,7 +1,9 @@
 # AppSec=\*
 
+**Description:**
 A OSINT=\* based, Chrome extension that searches for CVE info and FOSS & MOTS software versions.
 
+Special Thanks to the OG creators for OSINT=* Adam Odell, Shady Khourshid, & Ryan Borum
 
 **Usage:**
 
@@ -9,8 +11,6 @@ Highlight and right click CVE numbers or FOSS & MOTS software names and search a
 
 
 **Install \[CHROME\]:**
-
-
 1. `git clone https://github.com/LagSkip/AppSec-eq-star.git`
 2. Visit <chrome://extensions/> in the Chrome Browser
 3. Enable “Developer Mode”
@@ -19,13 +19,11 @@ Highlight and right click CVE numbers or FOSS & MOTS software names and search a
 
 
 **Future Features:**
-
-* Firefox
+* Firefox Extension
 * A Starship Troopers Icon
 
 
 **Search Locations:**
-
 * NIST NVD
 * MITRE
 * Snyk
