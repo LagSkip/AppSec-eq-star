@@ -1,3 +1,7 @@
+Original OSINT=* Team:
 Adam Odell
 Shady Khourshid
 Ryan Borum
+
+AppSec=* Modifier:
+LagSkip
