@@ -1,6 +1,7 @@
 # AppSec=\*
 
 **Description:**
+
 A OSINT=\* based, Chrome extension that searches for CVE info and FOSS & MOTS software versions.
 
 Special Thanks to the OG creators for OSINT=* Adam Odell, Shady Khourshid, & Ryan Borum
