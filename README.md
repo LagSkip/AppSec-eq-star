@@ -1,14 +1,49 @@
-# OSINT=*
-A Chrome extension that searches all the threat feeds. Highlight and right click IOC and search all relevant threat feeds. Developed by Adam Odell and Shady Khourshid. 
+# AppSec=\*
 
-Searches IP addresses, hashes, and domain names across the following sources when relevant:
-* VirusTotal
-* Cisco Talos
-* IBM X-Force
-* Hybrid Analysis
-* AbuseIPDB
-* IPinfo.io
-* GreyNoise
-* Shodan.io
+A OSINT=\* based, Chrome extension that searches for CVE info and FOSS & MOTS software versions.
 
-Download for Chrome: https://chrome.google.com/webstore/detail/osint/nfijbakmigddoodbhooklbcanfkmgcfk
+
+**Usage:**
+
+Highlight and right click CVE numbers or FOSS & MOTS software names and search all relevant locations.
+
+
+**Install \[CHROME\]:**
+
+
+1. `git clone https://github.com/LagSkip/AppSec-eq-star.git`
+2. Visit <chrome://extensions/> in the Chrome Browser
+3. Enable “Developer Mode”
+4. Click “Load unpacked”
+5. Find “AppSec-eq-star/chrome” and hit select
+
+
+**Future Features:**
+
+* Firefox
+* A Starship Troopers Icon
+
+
+**Search Locations:**
+
+* NIST NVD
+* MITRE
+* Snyk
+* Vulners
+* Sploitus
+* Exploit-DB
+* The CVE Program
+* GitHub
+* IronBank
+* Docker Hub
+* Go Pkg
+* Pypy
+* Python Foundation
+* RPM  
+* NPM
+* JSPM
+* Crates
+* JFrog C/C++ DB
+
+
+

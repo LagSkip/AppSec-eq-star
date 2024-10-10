@@ -1,21 +1,18 @@
 {
-   "author": "Adam Odell, Shady Khourshid",
+   "author": "LagSkip",
    "background": {
       "scripts": [ "script.js" ]
    },
-   "description": "Chrome extension that searches all the threat feeds",
-   "icons": {
-      "128": "128.png",
-      "48": "48.png"
-   },
+   "description": "Chrome extension that searches for CVE info and FOSS & MOTS software versions.",
+  
    "manifest_version": 2,
-   "name": "OSINT=*",
+   "name": "AppSec=*",
    "permissions": [
      "contextMenus",
      "storage"
    ],
    "update_url": "https://clients2.google.com/service/update2/crx",
-   "version": "1.03",
+   "version": "0.1.0",
    "options_ui": {
      "page": "options-menu\\options.html",
      "open_in_tab": false

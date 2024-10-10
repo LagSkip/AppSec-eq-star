@@ -1,78 +1,89 @@
 var menuId = chrome.contextMenus.create({
-  title: "OSINT=*",
+  title: "AppSec=*",
   id: "parent",
   contexts: [ "selection" ],
   onclick: main,
 })
 
-const osint_urls = {
-  abuseipdb: `https://www.abuseipdb.com/check/`,
-  greynoise: `https://www.greynoise.io/viz/ip/`,
-  hybridanalysis: `https://www.hybrid-analysis.com/search?query=`,
-  ibmxforce: `https://exchange.xforce.ibmcloud.com/search/`,
-  ipinfo: `https://ipinfo.io/`,
-  shodan: `https://www.shodan.io/search?query=`,
-  talosintelligence: `https://talosintelligence.com/reputation_center/lookup?search=`,
-  virustotal: `https://www.virustotal.com/gui/search/`
+const cve_urls = {
+  nvd: `https://nvd.nist.gov/vuln/search/results?query=`,
+  mitre: `https://cve.mitre.org/cgi-bin/cvename.cgi?name=`,
+  snyk: `https://security.snyk.io/vuln/?search=`,
+  vulners: `https://vulners.com/search?query=`,
+  sploitus: `https://sploitus.com/?query=`,
+  exploitdb: `https://www.exploit-db.com/?q=`,
+  cve: `https://www.cve.org/CVERecord?id=`,
+  dorked: `https://www.google.com/search?q=`
 };
 
+const package_urls = {
+  dorked: `https://www.google.com/search?q=`, // Removed Github b/c I was getting rate limited off rip and fuck em.
+  ironbank:`https://ironbank.dso.mil/repomap?searchText=`
+};
 
-function main(info, tab) {
-	// get highlighted text
-	var IOC = info.selectionText;
+function main(info, tab)
+{
+	// Get highlighted text:
+	var SEARCH = info.selectionText;
 
-	// replace "[dot]" with "."
-	IOC = IOC.replace(/\[dot\]/g, '.');
+	// Replace "[dot]" with ".":
+	SEARCH = SEARCH.replace(/\[dot\]/g, '.');
 
-	// remove whitespace, quotes, brackets
-	IOC = IOC.replace(/[\"\'\[\] ]/g, '');
+	// Remove quotes & brackets:
+	SEARCH = SEARCH.replace(/[\"\'\[\]]/g, '');
 
-	// regex check if IOC is md5, sha1, sha256 hash
-	var ishash = !IOC.search(/\b[A-Fa-f0-9]{32,64}\b/);
+	// Regex check if SEARCH is a CVE Number:
+	var isCVE = !SEARCH.search(/CVE-\d{4}-\d{4,7}/);
 
-	// regex check if IOC is IPv4 address
-	var isIP = !IOC.search(/^(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$/);
+  // Regex check if SEARCH is anything but a CVE Number:
+  var isSoftware = !SEARCH.search(/^(?!.*CVE-\d{4}-\d{4,7}).+$/);
 
-	if (ishash){ // search hash OSINT sources
+  // Search CVE sources:
+  if (isCVE) 
+  { 
+    // Var Dec:
     var urls = [];
-    var default_sources = ['virustotal', 'talosintelligence', 'ibmxforce', 'hybridanalysis']; //These are used if options are not set (ex: first time user)
-
-    chrome.storage.sync.get({filehash_osint_sources: default_sources,}, function(items) {
-      items.filehash_osint_sources.forEach(function (item, index) { // Iterate every OSINT source you have selected
-        urls.push(osint_urls[item] + IOC);
-      });
-      chrome.windows.create({ // Create the windows with the OSINT URLs
+    var keys = ['nvd', 'mitre', 'snyk', 'vulners', 'sploitus', 'exploitdb', 'dorked', 'cve'];
+    
+    // Set URL Searches:
+    for (var i = 0; i < keys.length; i++)
+    {
+      if (keys[i] === 'dorked') {urls.push(cve_urls[keys[i]] + SEARCH + "+(patch+OR+fix+OR+bug+OR+resolved+OR+solution)");}
+      else {urls.push(cve_urls[keys[i]] + SEARCH);}
+    }
+    
+    // Open URLS in new Chrome Incog Window:
+    chrome.windows.create({
         url: urls,
-        incognito: false,
+        incognito: true, 
       });
-    });
-	}
-	else if (isIP){ // search IP OSINT sources
+  }
+
+  // Search Open Source: (Assume Searching FOSS/MOTS)
+	else 
+  { 
+    // Var Dec:
     var urls = [];
-    var default_sources = ['virustotal', 'talosintelligence', 'ibmxforce', 'ipinfo', 'abuseipdb', 'greynoise', 'shodan'];
+    var keys = ['ironbank', 'dorked'];
+    var dork_site = ['github.com', 'hub.docker.com', 'pkg.go.dev', 'pypi.org', 'rpm.org', 'npmjs.com', 'jspm.io', 'crates.io', 'conan.io']
 
-    chrome.storage.sync.get({ip_osint_sources: default_sources,}, function(items) {
-      items.ip_osint_sources.forEach(function (item, index) {
-        urls.push(osint_urls[item] + IOC);
-      });
-      chrome.windows.create({
-        url: urls,
-        incognito: false,
-      });
-    });
-	}
-	else{ // assume IOC is domain name, search domain name OSINT sources
-    var urls = [];
-    var default_sources = ['virustotal', 'talosintelligence', 'ibmxforce', 'shodan'];
-
-    chrome.storage.sync.get({domain_osint_sources: default_sources,}, function(items) {
-      items.domain_osint_sources.forEach(function (item, index) {
-        urls.push(osint_urls[item] + IOC);
-      });
-      chrome.windows.create({
-        url: urls,
-        incognito: false,
-      });
+    // Replace " " with +:
+    SEARCH = SEARCH.replace(/ /g, '+');
+    
+    // Set URL Searches:
+    for (var i = 0; i < keys.length; i++)
+    {
+      if (keys[i] === 'dorked') 
+      {
+        for (var j = 0; j < dork_site.length; j++){urls.push(package_urls[keys[i]] + SEARCH + "+site%3A\""+dork_site[j]+"\"");}
+      }
+      else {urls.push(package_urls[keys[i]] + SEARCH);} // IB
+    }
+    
+    // Open URLS in new Chrome Window:
+    chrome.windows.create({
+      url: urls,
+      incognito: false,
     });
 	}
 }
